@@ -1,0 +1,50 @@
+﻿@page "/stadiums"
+@using BlazorServerCleanArchitecture.Application.Features.Stadiums.Queries.GetAllStadiums;
+@using MediatR
+@inject IMediator Mediator
+
+<PageTitle>Stadiums</PageTitle>
+
+<h1>Stadiums</h1>
+
+@if (stadiums == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>City</th>
+                <th>Capacity</th>
+                <th>Built Year</th>
+                <th>Pitch Length</th>
+                <th>Pitch Width</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stadium in stadiums)
+            {
+                <tr>
+                    <td>@stadium.Name</td>
+                    <td>@stadium.City</td>
+                    <td>@stadium.Capacity</td>
+                    <td>@stadium.BuiltYear</td>
+                    <td>@stadium.PitchLength</td>
+                    <td>@stadium.PitchWidth</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<GetAllStadiumsDto>? stadiums;
+
+    protected override async Task OnInitializedAsync()
+    {
+        stadiums = await Mediator.Send(new GetAllStadiumsQuery());
+    }
+}
